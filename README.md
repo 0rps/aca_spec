@@ -510,7 +510,7 @@ It will be sent with `Content-Type: application/json`
 "name": "name",
 "categories": [{"code": "IAB_7"}, {"code": "IAB_1-11"}],
 "campaign": {"id": 1}
-"file": "Y3JlYXRpdmVfaW1hZ2VfZGF0YQ=="
+"file": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAEBgIApD5fRAAAAABJRU5ErkJggg=="
 
 ```
 
