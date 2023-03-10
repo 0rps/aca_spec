@@ -496,13 +496,13 @@ All fields are mandatory
 
 ### Creative
 ##### `> POST /api/creatives/`
-It will be sent with `Content-Type: multipart/form-data`
+It will be sent with `Content-Type: application/json`
 ```json
 "external_id": <string>, // should be unique, mandatory
 "name": <string>, // mandatory
-"categories": [<IAB Category>, ...], // mandatory (could be empty)
+"categories": [<IAB Category>, ...], // mandatory (could be empty array)
 "campaign": <object with campaign id> // mandatory
-file: <blob>
+"file": <base64 encoded string>
 ```
 
 ```json
@@ -510,7 +510,7 @@ file: <blob>
 "name": "name",
 "categories": [{"code": "IAB_7"}, {"code": "IAB_1-11"}],
 "campaign": {"id": 1}
-file: <.....>
+"file": "Y3JlYXRpdmVfaW1hZ2VfZGF0YQ=="
 
 ```
 
