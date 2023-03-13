@@ -195,7 +195,7 @@ The tDSP should meet the following minimal requirements:
 `/rtb/bid/` - should receive bid request and return `BidResponse`
 
 **Notify endpoint**
-`/bid/notify/` - should be able to receive and parse notification data (win/loss) and make corresponding changes in the current budget.
+`/rtb/notify/` - should be able to receive and parse notification data (win/loss) and make corresponding changes in the current budget.
 
 
 ## tDSP Management part
