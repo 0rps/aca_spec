@@ -341,41 +341,11 @@ API format below describes all endpoints which could be used by tSSP that's why 
 ##### `> POST /rtb/bid/`
 
 ##### `Body:`
-```json
-{
-  "id": <string>,   // mandatory
-  "imp": {
-    "banner": { // mandatory
-      "w": <int>,
-      "h": <int>
-    },
-  },
-  "click": { 
-	  "prob": <float string> // mandatory
-  },
-  "conv": { 
-    "prob": <float string>   // mandatory
-  },
-  "site": {
-    "domain": <string> // mandatory
-  },
-  "ssp": {
-	  "id": <string> // mandatory
-  },
-  "user": { 
-    "id": <string> // mandatory
-  },
-  "bcat": [ // optional
-	  <string>,
-	  ...
-  ],
-}
-```
-
-**Example**:
-```json
+``` json
 { 
+  // Bid request id, <string>, mandatory
   "id": "some_id",
+  // impression slot information with size, mandatory
   "imp": {
     "banner": {
       "w": 300,
@@ -383,23 +353,26 @@ API format below describes all endpoints which could be used by tSSP that's why 
     },
   },
   "click": {
-	  "prob": "0.1"
+  // click probability, <float>, mandatory
+	  "prob": 0.1
   },
   "conv": {
-    "prob": "0.89" 
+  // conversion probability, <float>, mandatory
+    "prob": 0.89
   },
   "site": {
-	// publisher domain
+	// publisher domain, <string/URL>, mandatory
     "domain": "www.example.com",
   },
   "ssp": {
-	  "id": "0938831" // used for ads.txt
+  	  // SSP ID, used for ads.txt, <string>, mandatory
+	  "id": "0938831" 
   },
-  // could be used for frequency capping
+  // used in frequency capping, <string>, mandatory
   "user": { 
     "id": "u_cq_001_87311"
   },
-  // blocked categories
+  // blocked categories, optional
   "bcat": [
     "IAB2-1",
     "IAB2-2"
@@ -416,27 +389,16 @@ API format below describes all endpoints which could be used by tSSP that's why 
 
 ##### `Body:`
 ```json
-{
 
-  "external_id": <string>, // mandatory
-  "price": <float>, // mandatory
-  "image_url": <string>, // mandatory
-  "cat": [ // optional
-    <string>
-  ],
-}
-```
-
-**Example:**
-```json
 {
-  // creative external id
+  // All fields below are mandatory
+  // creative external id, <string>
   "external_id": "food_001_image",
-  // bid amount
-  "price": 2.50,
-  // creative url
+  // bid amount, <float>
+  "price": 2.5,
+  // creative url, <string/URL>
   "image_url": "https://www.creatives.com/food/1?width=300&height=250",
-  // creative category
+  // creative category, list of strings, could be empty
   "cat": [
     "IAB2-1"
   ],
@@ -447,35 +409,23 @@ API format below describes all endpoints which could be used by tSSP that's why 
 ### Notification URL
 ##### `> POST /rtb/notify/` 
 
-All fields are mandatory
 ##### `Body:`
 ```json
 {
-"id": <string>, // mandatory
-"win": <boolean>, // mandatory
-// impression cost (since there could be 2nd price auction)
-"price": <float>, // mandatory
-// has click
-"click": <boolean>, // mandatory
-// has impression
-"conversion": <boolean>, // mandatory
-// total revenue
-"revenue": <float> // mandatory
-}
-```
-
-**Example:**
-```json
-{
+// Bid Request ID, <string>, mandatory
 "id": "br_8747ha",
-// impression cost (since there could be 2nd price auction)
-"price": "2.5",
-// has click
+// win of loss flag, <bool>, mandatory  
+"win": true,
+
+// All fields below are mandatory if "win" is "true", in case if loss they are absent
+// impression cost (since there could be 2nd price auction), <float>
+"price": 2.5,
+// has click, <bool>
 "click": false,
-// has impression
+// has conversion, <bool>
 "conversion": false,
-// total revenue
-"revenue": "5.7"
+// total revenue for this round, <float>
+"revenue": 5.7
 }
 ```
 
@@ -498,18 +448,15 @@ All fields are mandatory
 ##### `> POST /api/creatives/`
 It will be sent with `Content-Type: application/json`
 ```json
-"external_id": <string>, // should be unique, mandatory
-"name": <string>, // mandatory
-"categories": [<IAB Category>, ...], // mandatory (could be empty array)
-"campaign": <object with campaign id> // mandatory
-"file": <base64 encoded string>
-```
-
-```json
+// creative external id to track it in external systems, <string>, mandatory, should be unique across all creatives
 "external_id": "external_id",
+// creative name, string, mandatory
 "name": "name",
+// creative categories, list of <category objects with <string> 'code' field>, mandatory but it is allowed to pass empty list
 "categories": [{"code": "IAB_7"}, {"code": "IAB_1-11"}],
+// campaign object, <object with <int> 'id' field>, mandatory
 "campaign": {"id": 1}
+// base64 string with encoded image data, <string>, mandatory
 "file": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAEBgIApD5fRAAAAABJRU5ErkJggg=="
 
 ```
@@ -519,27 +466,16 @@ It will be sent with `Content-Type: application/json`
 |---------------|-----------------------------------|---------------------------------------------------------------------|
 | `201`         | `application/json`      | `The format is located below`               |
 
-```json
-{
-	"id": <int>
-	"external_id": <string>,
-	"name": <string>,
-	"categories": [
-		<category_object>
-	],
-	"campaign": <campaign_object>
-	"url": <string>
-}
-```
-
 **Example:**
 ```json
 {
-"id": 10,  // your internal id
+// Internal ID of the creative object
+"id": 10,
 "external_id": "external_id",
 "name": "name",
 "categories": [{"id": 2, "code": "IAB_7"}, {"id":3, "code": "IAB_1-11"}],
 "campaign": {"id": 11, "name": "campaign name"},
+// URL of the uploaded creative ready for serving
 "url": "http://127.0.0.1:3030/1/"
 }
 ```
@@ -549,9 +485,11 @@ It will be sent with `Content-Type: application/json`
 
 ``` json
 {
-"name": <string>, // mandatory
-"budget": <int>  // mandatory
-// other fields are optional
+// <string>, mandatory
+"name": "campaign name",
+// <int>, mandatory
+"budget": 60
+// other fields must be optional
 }
 ```
 
@@ -562,10 +500,11 @@ It will be sent with `Content-Type: application/json`
 
 ```json
 {
-	"id": <int>  // your internal id
-	"name": <string>,
-	"budget": <int>,
-	... your other fields
+	// Campaign internal ID
+	"id": 1,
+	"name": "campaign name",
+	"budget": 60,
+	// ... your other fields
 }
 ```
 
@@ -575,17 +514,12 @@ All categories will be given in a file. You should write a management command to
 Categories should have the following fields:
 ```json
 {
-	"id": <int>, // your internal id
-	"code": <string>,
-	"name": <string>
-}
-```
-Example:
-```json
-{
-	"id": 10,
-	"code": "IAB2",
-	"name": "Automotive"
+	// Internal ID of the category
+	"id": 1,
+	// Code of the category from IAB file
+	"code": "IAB1",
+	// Name of the category from IAB file
+	"name": "Arts & Entertainment"
 }
 ```
 
@@ -597,14 +531,24 @@ File with categories could be taken from here:  [link](https://iabtechlab.com/wp
 
 ```json
 {
-	"impressions_total": <int>,
-	"auction_type": 1/2,
-	"mode": "free"/"script",
-	"budget": <int>,
-	"impression_revenue": <int>,
-	"click_revenue": <int>,
-	"conversion_revenue": <int>,
-	"frequency_capping": <int>,
+	// ALl fields are mandatory
+	
+	// number of rounds of the game, <int>
+	"impressions_total": 10,
+	// 1st or 2nd price auction, <int>, value must be 1 or 2
+	"auction_type": 1,
+	// game mode, <string> - "free" or "script"
+	"mode": "free",
+	// total budget for every team, <int>
+	"budget": 60,
+	// revenue for every won impression, <int> 
+	"impression_revenue": 3,
+	// revenue for every click, <int>
+	"click_revenue": 7,
+	// revenue for every conversion, <int>
+	"conversion_revenue": 30,
+	// how many times one campaign could be shown to the same user without any fines, <int>
+	"frequency_capping": 3,
 }
 ```
 
