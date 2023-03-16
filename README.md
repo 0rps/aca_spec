@@ -189,7 +189,8 @@ The tDSP should meet the following minimal requirements:
 **Game configuration**
 `/game/configure/` - should:
 * Override previous game configuration.
-* Delete all previous campaigns and creatives.
+* Delete all previous campaigns and creatives:
+	* It should be done at least in case of `"game_mode": "script"`.
 
 **Bid request endpoint**
 `/rtb/bid/` - should receive bid request and return `BidResponse`
@@ -404,6 +405,8 @@ API format below describes all endpoints which could be used by tSSP that's why 
   ],
 }
 ```
+
+**IMPORTANT**: "price" should have no more than 2 decimal places otherwise Bid Response is considered as No Bid.
 
 
 ### Notification URL
