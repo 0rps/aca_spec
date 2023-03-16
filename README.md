@@ -424,8 +424,8 @@ API format below describes all endpoints which could be used by tSSP that's why 
 "click": false,
 // has conversion, <bool>
 "conversion": false,
-// total revenue for this round, <float>
-"revenue": 5.7
+// total revenue for this round, <int>
+"revenue": 5
 }
 ```
 
