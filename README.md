@@ -118,8 +118,7 @@ Given 3 `DSPs`, one `tSSP`, and one `publisher site`. The budget for each DSP is
 The are two options for the goal score:
 
 **Total revenue**
-At the end of the game the score for each DSP is calculated by the following formula:
-* `rest of the budget` + `revenue`
+At the end of the game the score for each DSP is calculated by summing up all revenues from impressions, clicks, conversions (and it DOES NOT include the rest of the budget.)
 
 **Minimal CPC**
 The winner is chosen by minimal CPC, i.e.:
@@ -540,6 +539,8 @@ File with categories could be taken from here:  [link](https://iabtechlab.com/wp
 	"impressions_total": 10,
 	// 1st or 2nd price auction, <int>, value must be 1 or 2
 	"auction_type": 1,
+	// game goal, <string>, "revenue" or "cpc"
+	"game_goal": "revenue",
 	// game mode, <string> - "free" or "script"
 	"mode": "free",
 	// total budget for every team, <int>
