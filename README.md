@@ -260,7 +260,7 @@ A list of forbidden IAB categories comes in each `BidRequest`. If you send `BidR
 ### Respect creative size (`free` and `script` modes)
 All creatives uploaded to your platform have fixed size but it is not possible to predict which size of `AdSlots` is going to be in `BidRequest`. To support random sizes you can resize images and fill the empty background with some color. 
 
-### ads.txt sync (for `free` mode`)
+### ads.txt sync (`free` and `script` mode`)
 `ads.txt` is a file that is located in the root path of the publisher site, for instance:
 * `https://armeniasputnik.am/ads.txt`
 * `https://www.nytimes.com/ads.txt`
@@ -278,11 +278,11 @@ freewheel.tv, 799841, RESELLER
 
 But the real world is not so simple. SSP which are not listed in this file may send `BidRequests` too. It could be fraud or some SSPs are forgotten to be added to this file.
 
-**Let's assume that in this case revenue of impressions/click is decreased.**
+**If SSP does not have any connection with Publisher domain then `impression_revenue` is reduced to zero**
 
 To make correct calculations you should check `ads.txt` for that publisher and check if the SSP id is there.
 
-`ads.txt` will be served at a separate server and will be updated periodically. You should check it periodically too (`cron task`). 
+`ads.txt` will be served at a separate server.
 
 The content of the file will have the following format:
 ```
@@ -292,10 +292,14 @@ The content of the file will have the following format:
 
 You can extract the correct %SSP_ID% and %publisher domain% from the `Bid Request` body and get `ads.txt` with the following link: `%server%/ads.txt?publisher=%publisher_domain%`. The response will have the format presented above.
 
-There will be a restricted list of publisher domains during the game. So once you have known a new publisher domain you can check if the tSSP is authorized to sell traffic from it.
+Approximate scheme of such interaction is the following:
+
+![ads.txt](attachments/ads.txt.png)
 
 ### Frequency capping
-Sometimes it is very annoying for a user that you show him the same advertisement very often. You should store in your DB how many times each advertisment (campaign id) is shown for each user and make correct decisions. User id comes as a field in every `BidRequest` .
+Sometimes it is very annoying for a user that you show him the same advertisement very often. You should store in your DB how many times each advertisment (to be exact - campaign id) is shown for each user and make correct decisions. User id comes as a field in every `BidRequest`. 
+
+**NOTE:** frequency capping works per campaign (i.e. freq. cap = 4, creative_1 from campaign_1 has 4 impressions, creative_2 from the same campaign have 0 impression, next impressions for creative_1 and creative_2 will be fined because they exceed freq.cap. for the campaign).
 
 ----
 ## Additional tech features
